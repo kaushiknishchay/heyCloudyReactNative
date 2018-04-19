@@ -5,16 +5,18 @@ import styled from 'styled-components';
 
 import FolderItem from './FolderItem';
 import { backupListKey } from '../constants/storageKeys';
+import { appBackground } from '../constants/colors';
 
 const BackupScreen = styled.View`
   padding: 10px;
-  background: #f5f5f5;
+  background: ${appBackground};
   flex: 1;
 `;
 
 const SectionHeader = styled.Text`
   font-weight: bold;
-  font-size: 16px;
+  font-size: 14px;
+  letter-spacing: 0.51px;
   padding: 10px;
   background: #ddd;
   border-bottom-width: 1px;
@@ -98,7 +100,7 @@ class BackupSettingScreen extends Component {
       <BackupScreen>
         {deviceFolderList.length > 0 &&
         <SectionList
-          renderItem={({ item }) => <FolderItem item={item} onPress={this.onItemPress} />}
+          renderItem={({ item }) => <FolderItem item={item} touchable onPress={this.onItemPress} />}
           renderSectionHeader={({ section: { title } }) => <SectionHeader>{title}</SectionHeader>}
           sections={listData}
           keyExtractor={(item, index) => item + index}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Alert, CameraRoll, FlatList, StyleSheet, View } from 'react-native';
 import ImageItem from './ImageItem';
+import { appBackground } from '../constants/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -10,7 +11,7 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     alignContent: 'stretch',
     padding: 10,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: appBackground,
   },
   flatList: {
     marginLeft: 'auto',

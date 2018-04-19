@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { TouchableOpacity } from 'react-native';
+import { TouchableHighlight, TouchableOpacity } from 'react-native';
+import { headerColor, listItemSelectColor } from '../constants/colors';
 
 
 const FolderWrap = styled.View`
@@ -42,29 +43,43 @@ const CountBadge = styled.Text`
 `;
 
 
-const FolderItem = ({ item, onPress }) => {
+const FolderItem = ({ item, onPress, touchable }) => {
   const WrapperComponent = item.count ? FolderWrap : FolderWrap2;
+  if (touchable) {
+    return (
+      <TouchableHighlight
+        onPress={onPress}
+        underlayColor={listItemSelectColor}
+      >
+        <WrapperComponent>
+          <FolderText>{item.name ? item.name : item}</FolderText>
+          {
+            item.count &&
+            <CountBadge>{item.count}</CountBadge>}
+        </WrapperComponent>
+      </TouchableHighlight>
+    );
+  }
   return (
-    <TouchableOpacity
-      onPress={onPress}
-    >
-      <WrapperComponent>
-        <FolderText>{item.name ? item.name : item}</FolderText>
-        {
+    <WrapperComponent>
+      <FolderText>{item.name ? item.name : item}</FolderText>
+      {
         item.count &&
-        <CountBadge>{item.count}</CountBadge>}
-      </WrapperComponent>
-    </TouchableOpacity>
+        <CountBadge>{item.count}</CountBadge>
+      }
+    </WrapperComponent>
   );
 };
 
 FolderItem.defaultProps = {
   onPress: () => null,
+  touchable: false,
 };
 
 FolderItem.propTypes = {
   item: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
   onPress: PropTypes.func,
+  touchable: PropTypes.bool,
 };
 
 export default FolderItem;

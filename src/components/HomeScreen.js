@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { FlatList } from 'react-native';
 import styled from 'styled-components';
 import FolderItem from './FolderItem';
+import { appBackground } from '../constants/colors';
 
 const HomeWrap = styled.View`
   flex: 1;
-  background-color: #f5f5f5;
+  background-color: ${appBackground};
 `;
 
 const Section = styled.View`
