@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, AsyncStorage } from 'react-native';
 import styled from 'styled-components';
+
+
 import FolderItem from './FolderItem';
 import { appBackground } from '../constants/colors';
+import { backupFoldersKey } from '../constants/storageKeys';
+import realm from '../database/realm';
 
 const HomeWrap = styled.View`
   flex: 1;
@@ -31,26 +35,50 @@ const SubText = styled.Text`
 `;
 
 class Home extends Component {
-  keyExtractor = item => item.name;
+  constructor(props) {
+    super(props);
+    this.state = {
+      backupFolders: [],
+    };
+  }
+
+  componentDidMount() {
+    this.getFoldersFromRealm();
+  }
+
+  getFoldersFromRealm() {
+    const allFoldersList = this.getAllFoldersRealm();
+    if (allFoldersList.length > 0) {
+      const allFolders = allFoldersList[0].getBackupEnabledFolders();
+      this.setState({
+        backupFolders: allFolders,
+      });
+    }
+  }
+
+  getAllFoldersRealm = () => realm.objects('AllFoldersList');
+
+  keyExtractor = item => item.id + item.name;
 
   renderItem = ({ item }) => (
     <FolderItem item={item} />);
 
-  render() {
-    const backupFolders = [
-      {
-        name: 'DCIM',
-        count: 30,
-      },
-      {
-        name: 'Camera',
-        count: 20,
-      }, {
-        name: 'Snapseed',
-        count: 40,
-      },
-    ];
 
+  render() {
+    const { backupFolders } = this.state;
+    // const backupFolders = [
+    //   {
+    //     name: 'DCIM',
+    //     count: 30,
+    //   },
+    //   {
+    //     name: 'Camera',
+    //     count: 20,
+    //   }, {
+    //     name: 'Snapseed',
+    //     count: 40,
+    //   },
+    // ];
     return (
       <HomeWrap>
         <Section>

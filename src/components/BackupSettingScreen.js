@@ -1,16 +1,32 @@
 import React, { Component } from 'react';
-import { Alert, AsyncStorage, CameraRoll, SectionList } from 'react-native';
+import { ActivityIndicator, Alert, AsyncStorage, CameraRoll, FlatList, Text } from 'react-native';
 import styled from 'styled-components';
 
 
 import FolderItem from './FolderItem';
-import { backupListKey } from '../constants/storageKeys';
-import { appBackground } from '../constants/colors';
+import { backupFoldersKey } from '../constants/storageKeys';
+import { accentColor, appBackground } from '../constants/colors';
+import realm from '../database/realm';
 
 const BackupScreen = styled.View`
   padding: 10px;
   background: ${appBackground};
   flex: 1;
+  flex-direction: column;
+`;
+
+const ButtonGroup = styled.View`
+  padding: 10px;
+  margin: 10px;
+  flex-direction: row;
+  align-items: stretch;
+  align-content: center;
+  justify-content: space-around;
+`;
+
+const Button = styled.Button`
+  padding: 200px;
+  flex: 3;
 `;
 
 const SectionHeader = styled.Text`
@@ -24,87 +40,162 @@ const SectionHeader = styled.Text`
   color: #000;
 `;
 
+
 class BackupSettingScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      deviceFolderList: new Set([]),
-      backedUpFolderList: new Set([]),
-      notBackedUpFolderList: new Set([]),
+      isLoading: true,
+      deviceAllFolders: [],
     };
   }
 
 
-  componentDidMount = async () => {
+  componentDidMount() {
     try {
-      const value = await AsyncStorage.getItem(backupListKey);
-      if (value !== null) {
-        this.setState({
-          deviceFolderList: JSON.parse(value),
-        });
+      const allFoldersList = this.getAllFoldersRealm();
+      if (allFoldersList.length > 0) {
+        const allFolders = allFoldersList[0].getFolderList();
+        if (allFolders !== undefined && allFolders !== null && allFolders.length > 0) {
+          this.setFoldersInState(allFolders);
+        }
       } else {
         this.computeFolderList();
       }
     } catch (error) {
-      console.error('Error retrieving folder list from device', error);
+      this.computeFolderList();
+    }
+  }
+
+  getAllPhotosRealm = () => realm.objects('AllPhotos');
+  getAllFoldersRealm = () => realm.objects('AllFoldersList');
+
+
+  setFoldersInState = (allFolders) => {
+    this.setState({
+      isLoading: false,
+      deviceAllFolders: allFolders,
+    });
+  };
+
+  computeFolderList = () => {
+    try {
+      this.setState({
+        isLoading: true,
+      });
+
+      CameraRoll.getPhotos({
+        first: 9999,
+      }).then(res => res.edges)
+        .then((edges) => {
+          realm.write(() => {
+            if (this.getAllPhotosRealm().length > 0) {
+              realm.delete(this.getAllPhotosRealm());
+            }
+            if (this.getAllFoldersRealm().length > 0) {
+              realm.delete(this.getAllFoldersRealm());
+            }
+            const newEdges = edges.map(obj => obj.node);
+            const allPhotos = realm.create('AllPhotos', { edges: newEdges }, true);
+
+            const listFolders = allPhotos.transformFolders();
+            realm.create('AllFoldersList', { items: listFolders }, true);
+
+            // @TODO so it can be shown on home page also
+            // @TODO show count badge on setting screen also
+            // @TODO add save button in header bar also
+          });
+          const allFolders = this.getAllFoldersRealm()[0].getFolderList();
+          this.setFoldersInState(allFolders);
+        }).catch((err) => {
+          Alert.alert('Error Refreshing List', err.toString());
+        });
+    } catch (e) {
+      Alert.alert('Error Resetting List', e.toString());
     }
   };
 
-  onItemPress = () => {
-    alert('aa');
+
+  toggleItem = item => () => {
+    realm.write(() => {
+      this.getAllFoldersRealm()[0].toggleItem(item);
+    });
+
+    this.setState({
+      deviceAllFolders: this.getAllFoldersRealm()[0].getFolderList(),
+    });
   };
 
-  computeFolderList = async () => {
-    CameraRoll.getPhotos({
-      first: 99999,
-    }).then(res => res.edges)
-      .then((edges) => {
-        const tempList = new Set([]);
+  renderFolderListItem = ({ item }) => (<FolderItem
+    item={item}
+    touchable
+    onPress={this.toggleItem(item)}
+  />);
 
-        edges.forEach((photoItem) => {
-          const groupName = photoItem.node.group_name;
+  renderButtons = () => {
+    const { isLoading } = this.state;
 
-          // @TODO Implement name and count Set Object for each folder and save it
-          // @TODO so it can be shown on home page also
-          // @TODO show count badge on setting screen also
-          // @TODO add save button in header bar also
-          // @TODO change header bar color, setup color constants
-
-          if (!tempList.has(groupName)) {
-            tempList.add(groupName);
-          }
-        });
-
-        try {
-          AsyncStorage.setItem(backupListKey, JSON.stringify([...tempList]));
-        } catch (error) {
-          console.log('Error on saving folder List to device', error);
-        }
-
-        this.setState({
-          deviceFolderList: [...tempList],
-        });
-      }).catch((err) => {
-        Alert.alert('Error', JSON.stringify(err));
-      });
+    if (!isLoading) {
+      return (
+        <ButtonGroup>
+          <Button
+            title="Reset List"
+            onPress={this.computeFolderList}
+          />
+        </ButtonGroup>
+      );
+    }
+    return null;
   };
-
 
   render() {
-    const { deviceFolderList, backedUpFolderList, notBackedUpFolderList } = this.state;
-    const listData = [
-      { title: 'Selected Folders', data: [...backedUpFolderList.values()] },
-      { title: 'Not Selected Folders', data: deviceFolderList },
-    ];
+    const { deviceAllFolders, isLoading } = this.state;
+    const sNotBackedFolders = [...deviceAllFolders].filter(x => x.backedUp === false);
+    const sBackedFolders = [...deviceAllFolders].filter(x => x.backedUp === true);
+
     return (
       <BackupScreen>
-        {deviceFolderList.length > 0 &&
-        <SectionList
-          renderItem={({ item }) => <FolderItem item={item} touchable onPress={this.onItemPress} />}
-          renderSectionHeader={({ section: { title } }) => <SectionHeader>{title}</SectionHeader>}
-          sections={listData}
-          keyExtractor={(item, index) => item + index}
-        />
+
+        {
+          isLoading &&
+          <React.Fragment>
+            <ActivityIndicator size="large" color={accentColor} />
+            <Text
+              style={{
+                fontWeight: 'bold',
+                textAlign: 'center',
+                padding: 10,
+              }}
+            >
+              Please wait. It will take time to refresh the folders list
+              depending on number of photos/videos in the phone.
+            </Text>
+          </React.Fragment>
+        }
+
+        {
+          this.renderButtons()
+        }
+
+        {
+          !isLoading &&
+          sBackedFolders.length > 0 &&
+          <FlatList
+            renderItem={this.renderFolderListItem}
+            ListHeaderComponent={<SectionHeader>Selected Folders</SectionHeader>}
+            data={sBackedFolders}
+            keyExtractor={(item, index) => item + index}
+          />
+        }
+        {
+          !isLoading &&
+          sNotBackedFolders.length > 0 &&
+          <FlatList
+            renderItem={this.renderFolderListItem}
+            ListHeaderComponent={<SectionHeader>Not Selected Folders</SectionHeader>}
+            data={sNotBackedFolders}
+            keyExtractor={(item, index) => item + index}
+          />
         }
       </BackupScreen>
     );

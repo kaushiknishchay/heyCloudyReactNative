@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "react-native start",
-    "android": "react-native run-android",
+    "set-realm": "adb -e forward tcp:8083 tcp:8083",
+    "android": "yarn set-realm && react-native run-android",
+    "build:android": "react-native run-android --variant=release",
     "test": "jest",
     "lint": "eslint --ext=js .",
     "precommit": "yarn lint",
@@ -23,6 +25,8 @@
     "react-native": "0.55.3",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^1.5.11",
+    "realm": "^2.2.20",
+    "rxjs": "^5.5.10",
     "styled-components": "^3.2.6"
   },
   "devDependencies": {

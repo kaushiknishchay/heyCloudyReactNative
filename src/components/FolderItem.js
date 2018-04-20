@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { TouchableHighlight, TouchableOpacity } from 'react-native';
-import { headerColor, listItemSelectColor } from '../constants/colors';
+import { TouchableOpacity } from 'react-native';
 
 
 const FolderWrap = styled.View`
@@ -43,33 +42,38 @@ const CountBadge = styled.Text`
 `;
 
 
-const FolderItem = ({ item, onPress, touchable }) => {
-  const WrapperComponent = item.count ? FolderWrap : FolderWrap2;
-  if (touchable) {
+class FolderItem extends React.Component {
+  showBadge = (item) => {
+    if (item.count !== undefined && item.count !== null && item.count > 0) {
+      return (<CountBadge>{item.count}</CountBadge>);
+    }
+    return null;
+  };
+
+  render() {
+    const { item, onPress, touchable } = this.props;
+    const WrapperComponent = !touchable ? FolderWrap : FolderWrap2;
+    if (touchable) {
+      return (
+        <TouchableOpacity
+          onPress={onPress}
+          activeOpacity={0.5}
+        >
+          <WrapperComponent>
+            <FolderText>{item.name ? item.name : item}</FolderText>
+            {this.showBadge(item)}
+          </WrapperComponent>
+        </TouchableOpacity>
+      );
+    }
     return (
-      <TouchableHighlight
-        onPress={onPress}
-        underlayColor={listItemSelectColor}
-      >
-        <WrapperComponent>
-          <FolderText>{item.name ? item.name : item}</FolderText>
-          {
-            item.count &&
-            <CountBadge>{item.count}</CountBadge>}
-        </WrapperComponent>
-      </TouchableHighlight>
+      <WrapperComponent>
+        <FolderText>{item.name ? item.name : item}</FolderText>
+        {this.showBadge(item)}
+      </WrapperComponent>
     );
   }
-  return (
-    <WrapperComponent>
-      <FolderText>{item.name ? item.name : item}</FolderText>
-      {
-        item.count &&
-        <CountBadge>{item.count}</CountBadge>
-      }
-    </WrapperComponent>
-  );
-};
+}
 
 FolderItem.defaultProps = {
   onPress: () => null,
