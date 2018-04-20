@@ -28,8 +28,8 @@ const FolderText = styled.Text`
   flex: 90;
 `;
 const CountBadge = styled.Text`
-  flex: 5;
-  width: 20px;
+  flex: 8;
+  width: 40px;
   font-size: 14px;
   line-height: 24px;
   color: #fff;

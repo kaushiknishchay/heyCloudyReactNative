@@ -51,7 +51,7 @@ const DrawerNavigation = DrawerNavigator({
     },
   },
 }, {
-  initialRouteName: 'BackupSetting',
+  initialRouteName: 'Home',
   navigationOptions: {
     headerTitle: 'Menu',
   },

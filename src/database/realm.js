@@ -86,7 +86,9 @@ class AllPhotos extends Realm.Object {
 
   transformFolders() {
     return Object.keys(this.getAllFolders())
-      .map(key => ({ name: key, count: this.getAllFolders()[key], backedUp: false }));
+      .map((key, idx) => ({
+        id: idx, name: key, count: this.getAllFolders()[key], backedUp: false,
+      }));
   }
 
   getAllFolders() {
