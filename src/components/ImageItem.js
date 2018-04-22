@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Image, PixelRatio, StyleSheet, Dimensions } from 'react-native';
-
+import { Dimensions, Image, PixelRatio, StyleSheet } from 'react-native';
+import RNFS from 'react-native-fs';
 
 const ImageWrap = styled.View`
   flex: 1;
@@ -50,6 +50,18 @@ const ImageItem = ({ data }) => {
     imageHeight = (imageWidth / minOf) * maxOf * 0.8;
   }
 
+  const data1 = new FormData();
+  data1.append('name', 'testName'); // you can append anyone.
+  data1.append('photo', {
+    uri: node.image.uri,
+    type: 'image/jpeg', // or photo.type
+    name: 'testPhotoName',
+  });
+  console.log(data1);
+
+  RNFS.readFile(node.image.uri, 'base64')
+    .then(data11 => console.log(data11))
+    .catch(err => console.log(err));
 
   return (
     <ImageWrap
@@ -66,6 +78,7 @@ const ImageItem = ({ data }) => {
         resizeMode="contain"
       />
       <ImageAlbumText>{node.group_name}</ImageAlbumText>
+      <ImageAlbumText>{node.image.uri}</ImageAlbumText>
     </ImageWrap>
   );
 };

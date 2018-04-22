@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { FlatList, AsyncStorage } from 'react-native';
+import { FlatList } from 'react-native';
 import styled from 'styled-components';
-
+import RNFS from 'react-native-fs';
 
 import FolderItem from './FolderItem';
 import { appBackground } from '../constants/colors';
-import { backupFoldersKey } from '../constants/storageKeys';
 import realm from '../database/realm';
 
 const HomeWrap = styled.View`
@@ -43,6 +42,24 @@ class Home extends Component {
   }
 
   componentDidMount() {
+    // RNFS.readDir(RNFS.ExternalStorageDirectoryPath)
+    //   .then((result) => {
+    //     console.log('GOT RESULT', result);
+    //     return Promise.all([RNFS.stat(result[0].path), result[0].path]);
+    //   })
+    //   .then((statResult) => {
+    //     if (statResult[0].isFile()) {
+    //       return RNFS.readFile(statResult[1], 'utf8');
+    //     }
+    //     return 'no file';
+    //   })
+    //   .then((contents) => {
+    //     console.log(contents);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.message, err.code);
+    //   });
+
     this.getFoldersFromRealm();
   }
 
