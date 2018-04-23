@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -85,8 +86,6 @@ class ImageItem extends React.Component {
       type: 'image/jpeg', // or photo.type
       name: 'testPhotoName',
     });
-    console.log(this.state);
-
 
     return (
       <ImageWrap

@@ -14,9 +14,26 @@ function getFileData(path, type = 'utf8') {
   // .catch(err => console.log(err));
 }
 
+function reduceFolderArray(edgesArray) {
+  return edgesArray
+    .reduce((acc, o) => {
+      acc[o.group_name] = (acc[o.group_name] || 0) + 1;
+      return acc;
+    }, {});
+}
+
+function transformFolderArray(folderArray) {
+  return Object.keys(folderArray)
+    .map((key, index) => ({
+      id: index, name: key, count: folderArray[key], backedUp: false,
+    }));
+}
+
 const fileUtil = {
   getFileStat,
   getFileData,
+  reduceFolderArray,
+  transformFolderArray,
 };
 
 export default fileUtil;
