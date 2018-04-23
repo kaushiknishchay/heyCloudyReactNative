@@ -1,7 +1,9 @@
+/* eslint-disable react/no-unused-state */
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Image, PixelRatio, StyleSheet, Dimensions } from 'react-native';
+import { Dimensions, Image, StyleSheet } from 'react-native';
+import fileUtil from '../utils/file';
 
 
 const ImageWrap = styled.View`
@@ -17,7 +19,7 @@ const ImageWrap = styled.View`
 const ImageAlbumText = styled.Text`
   background: #fff;
   margin: 0px;
-  padding: 20px;
+  padding: 15px 20px;
   font-size: 18px;
   font-weight: bold;
   border-radius: 2px;
@@ -33,42 +35,77 @@ const styles = StyleSheet.create({
   },
 });
 
-const ImageItem = ({ data }) => {
-  const screenWidth = Dimensions.get('screen').width - 20;
-  let imageHeight;
-  const node = data;
-  const { image } = node;
-
-
-  const maxOf = image.width > image.height ? image.width : image.height;
-  const minOf = image.width < image.height ? image.width : image.height;
-  const imageWidth = screenWidth;
-
-  if (image.width > image.height) {
-    imageHeight = (imageWidth / maxOf) * minOf;
-  } else {
-    imageHeight = (imageWidth / minOf) * maxOf * 0.8;
+class ImageItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      imageData: {},
+      albumName: '',
+      timestamp: '',
+      fileType: '',
+    };
   }
 
 
-  return (
-    <ImageWrap
-      style={{
+  componentDidMount() {
+    const { data } = this.props;
+    if (data !== undefined && data.image !== undefined) {
+      fileUtil.getFileStat(data.image.uri)
+        .then(stats => this.setState({
+          imageData: stats,
+          albumName: data.group_name,
+          timestamp: data.timestamp,
+          fileType: data.type,
+        }));
+    }
+  }
+
+
+  render() {
+    const { data } = this.props;
+    const { image } = data;
+    const { imageData, albumName } = this.state;
+
+    const screenWidth = Dimensions.get('screen').width - 20;
+    let imageHeight;
+
+    const maxOf = image.width > image.height ? image.width : image.height;
+    const minOf = image.width < image.height ? image.width : image.height;
+    const imageWidth = screenWidth;
+
+    if (image.width > image.height) {
+      imageHeight = (imageWidth / maxOf) * minOf;
+    } else {
+      imageHeight = (imageWidth / minOf) * maxOf * 0.8;
+    }
+
+    const data1 = new FormData();
+    data1.append('name', 'testName'); // you can append anyone.
+    data1.append('photo', {
+      uri: image.uri,
+      type: 'image/jpeg', // or photo.type
+      name: 'testPhotoName',
+    });
+
+    return (
+      <ImageWrap
+        style={{
           elevation: 2,
         }}
-    >
-      <Image
-        style={[styles.imageStyle, {
+      >
+        <Image
+          style={[styles.imageStyle, {
             width: imageWidth,
             height: imageHeight,
           }]}
-        source={{ uri: node.image.uri }}
-        resizeMode="contain"
-      />
-      <ImageAlbumText>{node.group_name}</ImageAlbumText>
-    </ImageWrap>
-  );
-};
+          source={{ uri: image.uri }}
+          resizeMode="contain"
+        />
+        <ImageAlbumText>{imageData.filename} ({albumName})</ImageAlbumText>
+      </ImageWrap>
+    );
+  }
+}
 
 
 ImageItem.propTypes = {

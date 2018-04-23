@@ -14,7 +14,9 @@ const DrawerLabel = ({ children, ...props }) => (
   <Text
     style={{
       margin: 16,
-      fontSize: 14,
+      fontSize: 15,
+      paddingTop: 15,
+      paddingBottom: 15,
       fontFamily: 'Roboto',
       fontWeight: 'bold',
       color: '#111',
@@ -51,7 +53,7 @@ const DrawerNavigation = DrawerNavigator({
     },
   },
 }, {
-  initialRouteName: 'BackupSetting',
+  initialRouteName: 'Home',
   navigationOptions: {
     headerTitle: 'Menu',
   },
