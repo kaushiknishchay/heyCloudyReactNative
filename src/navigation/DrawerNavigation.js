@@ -14,9 +14,9 @@ const DrawerLabel = ({ children, ...props }) => (
   <Text
     style={{
       margin: 16,
-      fontSize: 15,
-      paddingTop: 15,
-      paddingBottom: 15,
+      fontSize: 17,
+      paddingTop: 8,
+      paddingBottom: 8,
       fontFamily: 'Roboto',
       fontWeight: 'bold',
       color: '#111',
