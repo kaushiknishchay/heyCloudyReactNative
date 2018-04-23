@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "react-native start",
-    "set-realm": "adb forward tcp:8083 tcp:8083",
+    "set-realm": "adb devices | tail -n +3 | cut -sf 1 -d \" \" | xargs -iX adb forward tcp:8083 tcp:8083",
     "android": "yarn set-realm && react-native run-android",
     "build:android": "react-native run-android --variant=release",
     "test": "jest",

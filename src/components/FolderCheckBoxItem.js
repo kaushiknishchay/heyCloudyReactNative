@@ -2,18 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { TouchableOpacity } from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { accentColor } from '../constants/colors';
 
 
 const FolderWrap = styled.View`
-  padding: 8px 0;
-  margin-bottom: 5px;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  flex-direction: row;
-`;
-
-const FolderWrap2 = styled.View`
   padding: 15px;
   border-bottom-width: 1px;
   border-bottom-color: #eee;
@@ -28,7 +21,8 @@ const FolderText = styled.Text`
   flex: 90;
 `;
 const CountBadge = styled.Text`
-  flex: 10;
+  flex: 5;
+  width: 20px;
   font-size: 14px;
   line-height: 24px;
   color: #fff;
@@ -41,7 +35,7 @@ const CountBadge = styled.Text`
 `;
 
 
-class FolderItem extends React.Component {
+class FolderCheckBoxItem extends React.Component {
   showBadge = (item) => {
     if (item.count !== undefined && item.count !== null && item.count > 0) {
       return (<CountBadge>{item.count}</CountBadge>);
@@ -50,39 +44,35 @@ class FolderItem extends React.Component {
   };
 
   render() {
-    const { item, onPress, touchable } = this.props;
-    const WrapperComponent = !touchable ? FolderWrap : FolderWrap2;
-    if (touchable) {
-      return (
-        <TouchableOpacity
-          onPress={onPress}
-          activeOpacity={0.5}
-        >
-          <WrapperComponent>
-            <FolderText>{item.name ? item.name : item}</FolderText>
-            {this.showBadge(item)}
-          </WrapperComponent>
-        </TouchableOpacity>
-      );
-    }
+    const { item, onPress } = this.props;
+
+    const iconType = item.backedUp ? 'check-box' : 'check-box-outline-blank';
+
     return (
-      <WrapperComponent>
-        <FolderText>{item.name ? item.name : item}</FolderText>
-        {this.showBadge(item)}
-      </WrapperComponent>
+      <TouchableOpacity
+        onPress={onPress}
+        activeOpacity={0.5}
+      >
+        <FolderWrap>
+          <FolderText>{item.name ? item.name : item}</FolderText>
+          <MaterialIcons
+            name={iconType}
+            size={28}
+            color={accentColor}
+          />
+        </FolderWrap>
+      </TouchableOpacity>
     );
   }
 }
 
-FolderItem.defaultProps = {
+FolderCheckBoxItem.defaultProps = {
   onPress: () => null,
-  touchable: false,
 };
 
-FolderItem.propTypes = {
+FolderCheckBoxItem.propTypes = {
   item: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
   onPress: PropTypes.func,
-  touchable: PropTypes.bool,
 };
 
-export default FolderItem;
+export default FolderCheckBoxItem;

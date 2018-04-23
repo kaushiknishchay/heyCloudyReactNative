@@ -1,5 +1,6 @@
 import Realm from 'realm';
 
+
 class Folder extends Realm.Object {
   get data() {
     return {
@@ -65,7 +66,6 @@ Image.schema = {
     playableDuration: 'int?',
   },
 };
-
 class Node extends Realm.Object {
 }
 
@@ -79,24 +79,51 @@ Node.schema = {
   },
 };
 
+class BackupInfo extends Realm.Object {
+  getData() {
+    return {
+      timestamp: this.timestamp,
+      filesCount: this.filesCount,
+      successful: this.successful,
+      errorMessage: this.errorMessage,
+    };
+  }
+}
+
+BackupInfo.schema = {
+  name: 'BackupInfo',
+  properties: {
+    timestamp: 'date',
+    filesCount: 'int',
+    successful: 'bool',
+    errorMessage: 'string',
+  },
+};
+
 class AllPhotos extends Realm.Object {
+  name = 'AllPhotos';
+
   getAllNodes() {
     return this.edges;
   }
 
-  transformFolders() {
-    return Object.keys(this.getAllFolders())
-      .map(key => ({ name: key, count: this.getAllFolders()[key], backedUp: false }));
-  }
+  //
+  // transformFolders() {
+  //   const allFolders = this.getAllFolders();
+  //   return Object.keys(allFolders)
+  //     .map((key, index) => ({
+  //       id: index, name: key, count: allFolders[key], backedUp: false,
+  //     }));
+  // }
 
-  getAllFolders() {
-    return this.edges
-      // .map(item => item.group_name)
-      .reduce((acc, o) => {
-        acc[o.group_name] = (acc[o.group_name] || 0) + 1;
-        return acc;
-      }, {});
-  }
+  // getAllFolders() {
+  //   return this.edges
+  //     // .map(item => item.group_name)
+  //     .reduce((acc, o) => {
+  //       acc[o.group_name] = (acc[o.group_name] || 0) + 1;
+  //       return acc;
+  //     }, {});
+  // }
 }
 
 AllPhotos.schema = {
@@ -106,8 +133,31 @@ AllPhotos.schema = {
   },
 };
 
-export default new Realm({
+// --------------------------------------------- //
+// Realm Object and Methods to return its Object //
+// --------------------------------------------- //
+
+const realm = new Realm({
   schema: [
-    Folder, AllFoldersList, AllPhotos, Node, Image],
+    Folder, AllFoldersList, AllPhotos, Node, Image, BackupInfo],
   schemaVersion: 5,
 });
+
+
+export const getAllFoldersRealm = () => realm.objects('AllFoldersList');
+
+export const getAllFoldersFromDB = () => {
+  if (getAllFoldersRealm().length > 0) return getAllFoldersRealm()[0];
+  return undefined;
+};
+
+export const getAllPhotosRealm = () => realm.objects('AllPhotos');
+
+export const getBackupInfo = () => {
+  const backupObj = realm.objects('BackupInfo');
+  if (backupObj.length > 0) { return backupObj[0].getData(); }
+  return undefined;
+};
+
+
+export default realm;
