@@ -154,6 +154,7 @@ android {
 }
 
 dependencies {
+    compile project(path: ':react-native-background-task')
     compile project(path: ':react-native-fs')
     compile project(path: ':react-native-fetch-blob')
     compile project(':realm')

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, CameraRoll, FlatList } from 'react-native';
+import { Alert, CameraRoll, FlatList, Switch, AsyncStorage } from 'react-native';
 import styled from 'styled-components';
 // ------ Constants -------- //
 import { appBackground } from '../constants/colors';
@@ -35,11 +35,23 @@ const SectionHeader = styled.Text`
   color: #000;
 `;
 
+const SwitchWrap = styled.View`
+  padding: 20px 15px;
+  flex-direction: row;
+  margin-bottom: 5px;
+`;
+
+const SwitchText = styled.Text`
+  font-size: 19px;
+  flex: 1;
+`;
+
 
 class BackupSettingScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      serviceEnabled: false,
       isLoading: true,
       deviceAllFolders: [],
     };
@@ -60,6 +72,13 @@ class BackupSettingScreen extends Component {
     } catch (error) {
       Alert.alert('Error Fetching folders', error);
     }
+    AsyncStorage.getItem('serviceEnabled')
+      .then((res) => {
+        this.setState({
+          serviceEnabled: res === 'true',
+        });
+      })
+      .catch((err) => {});
   }
 
   setFoldersInState = (allFolders) => {
@@ -113,11 +132,16 @@ class BackupSettingScreen extends Component {
     });
   };
 
-  renderFolderListItem = ({ item }) => (<FolderCheckBoxItem
-    item={item}
-    touchable
-    onPress={this.toggleItem(item)}
-  />);
+
+  toggleBackupService = () => {
+    AsyncStorage.setItem('serviceEnabled', `${!this.state.serviceEnabled}`)
+      .catch((err) => {});
+
+    this.setState((s, p) => ({
+      serviceEnabled: !s.serviceEnabled,
+    }));
+  };
+
 
   renderListHeader = () => (
     <SectionHeaderWrap>
@@ -128,11 +152,26 @@ class BackupSettingScreen extends Component {
       />
     </SectionHeaderWrap>);
 
+  renderFolderListItem = ({ item }) => (<FolderCheckBoxItem
+    item={item}
+    touchable
+    onPress={this.toggleItem(item)}
+  />);
+
+
   render() {
-    const { deviceAllFolders, isLoading } = this.state;
+    const { deviceAllFolders, isLoading, serviceEnabled } = this.state;
 
     return (
       <BackupScreen>
+
+        <SwitchWrap>
+          <SwitchText>Enable Service</SwitchText>
+          <Switch
+            onValueChange={this.toggleBackupService}
+            value={serviceEnabled}
+          />
+        </SwitchWrap>
 
         {isLoading && <LoadingPage text={Str.refreshWaitText} />}
 
