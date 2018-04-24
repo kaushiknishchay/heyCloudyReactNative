@@ -53,6 +53,15 @@ AllFoldersList.schema = {
 };
 
 class Image extends Realm.Object {
+  toString() {
+    return {
+      uri: this.uri,
+      height: this.height,
+      width: this.width,
+      isStored: this.isStored,
+      playableDuration: this.playableDuration,
+    };
+  }
 }
 
 Image.schema = {
@@ -66,6 +75,14 @@ Image.schema = {
   },
 };
 class Node extends Realm.Object {
+  toString() {
+    return {
+      type: this.type,
+      group_name: this.group_name,
+      image: this.image.toString(),
+      timestamp: this.timestamp,
+    };
+  }
 }
 
 Node.schema = {
@@ -103,7 +120,16 @@ class AllPhotos extends Realm.Object {
   name = 'AllPhotos';
 
   getAllNodes() {
-    return this.edges;
+    return [...this.edges.values()].map(obj => obj.toString());
+  }
+
+  getPhotosToBackup(backupFolders) {
+    const allPhotosList = this.getAllNodes();
+    const allFolders = backupFolders.reduce((acc, cur) => {
+      acc[cur.name] = cur.backedUp;
+      return acc;
+    }, []);
+    return allPhotosList.filter(obj => allFolders[obj.group_name] === true);
   }
 
   //

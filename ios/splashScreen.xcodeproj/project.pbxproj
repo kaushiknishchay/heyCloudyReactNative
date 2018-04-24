@@ -55,6 +55,7 @@
 		B5B72F88A29F4124B03B3E86 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 91D68F5F5F214D53B44A1F37 /* libz.tbd */; };
 		0B79D09E6DFC42BDA348C566 /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 62714B34949E4607A14C9D1D /* libRNFS.a */; };
 		772DB7F1BBAD40468EE9014A /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9207FA4DD184372B8AD5924 /* libRNFetchBlob.a */; };
+		388B4FE70C7747BBAF4723A5 /* libVydiaRNFileUploader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C47278920154BD9BBEC7712 /* libVydiaRNFileUploader.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -382,6 +383,8 @@
 		62714B34949E4607A14C9D1D /* libRNFS.a */ = {isa = PBXFileReference; name = "libRNFS.a"; path = "libRNFS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		72E6F5F0C2E148908A176883 /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; name = "RNFetchBlob.xcodeproj"; path = "../node_modules/react-native-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		D9207FA4DD184372B8AD5924 /* libRNFetchBlob.a */ = {isa = PBXFileReference; name = "libRNFetchBlob.a"; path = "libRNFetchBlob.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		076181189FE445E38103C64B /* VydiaRNFileUploader.xcodeproj */ = {isa = PBXFileReference; name = "VydiaRNFileUploader.xcodeproj"; path = "../node_modules/react-native-background-upload/ios/VydiaRNFileUploader.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		9C47278920154BD9BBEC7712 /* libVydiaRNFileUploader.a */ = {isa = PBXFileReference; name = "libVydiaRNFileUploader.a"; path = "libVydiaRNFileUploader.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -416,6 +419,7 @@
 				B5B72F88A29F4124B03B3E86 /* libz.tbd in Frameworks */,
 				0B79D09E6DFC42BDA348C566 /* libRNFS.a in Frameworks */,
 				772DB7F1BBAD40468EE9014A /* libRNFetchBlob.a in Frameworks */,
+				388B4FE70C7747BBAF4723A5 /* libVydiaRNFileUploader.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -608,6 +612,7 @@
 				DE1BEB7FFF1D47238A3BB6FA /* RealmReact.xcodeproj */,
 				A4970B61419B410F99A801C0 /* RNFS.xcodeproj */,
 				72E6F5F0C2E148908A176883 /* RNFetchBlob.xcodeproj */,
+				076181189FE445E38103C64B /* VydiaRNFileUploader.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1268,6 +1273,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1295,6 +1301,7 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/splashScreen.app/splashScreen";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
@@ -1382,6 +1389,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1419,6 +1427,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1455,6 +1464,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1490,6 +1500,7 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
