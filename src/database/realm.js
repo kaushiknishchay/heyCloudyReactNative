@@ -110,7 +110,7 @@ BackupInfo.schema = {
   name: 'BackupInfo',
   properties: {
     timestamp: 'date',
-    filesCount: 'int',
+    filesCount: { type: 'int', default: 0 },
     successful: 'bool',
     errorMessage: 'string',
   },

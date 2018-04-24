@@ -1,6 +1,6 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
-import { FlatList } from 'react-native';
+import { Button, FlatList } from 'react-native';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -13,6 +13,7 @@ import Str from '../constants/string';
 import { appBackground } from '../constants/colors';
 import doPermissionRequest from '../utils/permissions';
 import { getAllFoldersFromDB, getBackupInfo } from '../database/realm';
+import doFileUpload from '../service/manualFileUpload';
 
 
 const HomeWrap = styled.View`
@@ -70,7 +71,13 @@ class Home extends Component {
     //   });
 
     this.getFoldersFromRealm();
+
+    this.setBackUpInfo();
   }
+
+  setBackUpInfo = () => {
+    console.log(getBackupInfo());
+  };
 
   getFoldersFromRealm() {
     const allFoldersList = getAllFoldersFromDB();
@@ -129,8 +136,11 @@ class Home extends Component {
       return (
         <Section>
           <TitleText>Last Backup Info</TitleText>
-          <SubText>Date: {backupInfo.timestamp}</SubText>
+          <SubText>Date: {new Date(backupInfo.timestamp).toLocaleString()}</SubText>
           <SubText>Total Files Backed Up: {backupInfo.filesCount}</SubText>
+          {!backupInfo.successful &&
+          <SubText>Error: {backupInfo.errorMessage}</SubText>
+          }
         </Section>);
     }
     if (!backupInfo && backupFolders.length > 0) {
@@ -151,6 +161,11 @@ class Home extends Component {
 
     return (
       <HomeWrap>
+
+        <Button
+          title="Backup"
+          onPress={() => doFileUpload()}
+        />
 
         {this.renderBackupInfo(backupFolders)}
 
