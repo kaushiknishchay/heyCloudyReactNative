@@ -33,14 +33,14 @@ const DrawerLabel = ({ children, icon, ...props }) => (
     <Text
       style={{
       flex: 3,
-      marginLeft: 20 + icon ? 0 : 34,
       fontSize: 17,
       padding: 5,
-      lineHeight: 20,
-      fontFamily: 'Roboto',
-      fontWeight: 'bold',
       color: '#111',
-    }}
+      lineHeight: 20,
+      fontWeight: 'bold',
+      fontFamily: 'Roboto',
+      marginLeft: 20 + icon ? 0 : 34,
+      }}
       {...props}
     >
       {children}

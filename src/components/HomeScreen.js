@@ -35,10 +35,15 @@ const TitleText = styled.Text`
   color: #222;
   margin-bottom: 10px;
 `;
+const BoldText = styled.Text`
+  font-weight: bold;
+  color: #333;
+`;
 
 const SubText = styled.Text`
   font-size: 17px;
   margin: 5px 0;
+  color: #555;
   line-height: 20px;
 `;
 
@@ -99,7 +104,7 @@ class Home extends Component {
     if (backupFolders && backupFolders.length > 0) {
       return (
         <Section>
-          <TitleText>Backed Up Folders</TitleText>
+          <TitleText>Selected Folders</TitleText>
           <FlatList
             renderItem={this.renderItem}
             data={backupFolders}
@@ -136,8 +141,17 @@ class Home extends Component {
       return (
         <Section>
           <TitleText>Last Backup Info</TitleText>
-          <SubText>Date: {new Date(backupInfo.timestamp).toLocaleString()}</SubText>
-          <SubText>Total Files Backed Up: {backupInfo.filesCount}</SubText>
+
+          <SubText>
+            <BoldText>Date: </BoldText>
+            {new Date(backupInfo.timestamp).toLocaleString()}
+          </SubText>
+
+          <SubText>
+            <BoldText>Files count: </BoldText>
+            {backupInfo.filesCount}
+          </SubText>
+
           {!backupInfo.successful &&
           <SubText>Error: {backupInfo.errorMessage}</SubText>
           }
@@ -162,10 +176,10 @@ class Home extends Component {
     return (
       <HomeWrap>
 
-        <Button
+        {false && <Button
           title="Backup"
           onPress={() => doFileUpload()}
-        />
+        />}
 
         {this.renderBackupInfo(backupFolders)}
 
