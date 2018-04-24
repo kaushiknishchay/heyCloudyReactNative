@@ -3,6 +3,7 @@ package com.splashscreen;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.vydia.RNUploader.UploaderReactPackage;
 import com.jamesisaac.rnbackgroundtask.BackgroundTaskPackage;
 import com.rnfs.RNFSPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
@@ -28,6 +29,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new UploaderReactPackage(),
             new BackgroundTaskPackage(),
             new RNFSPackage(),
             new RNFetchBlobPackage(),
