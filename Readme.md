@@ -16,7 +16,7 @@ Run `yarn set-realm` and `yarn run-android` to debug app on android device and s
 
 - `Add Queue` to solve 30s timeout on iOS devices
 
-- `Add Listener` on Upload to keep track of files that were backed up and store info in Realm
+- <del>`Add Listener` on Upload to keep track of files that were backed up and store info in Realm</del>
 
 - Can remove RNFS since rn-background-upload reads image from path.
 

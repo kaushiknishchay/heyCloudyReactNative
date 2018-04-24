@@ -2,7 +2,7 @@ import Upload from 'react-native-background-upload';
 import realm from '../database/realm';
 
 const commonOptions = {
-  url: 'http://10.0.2.2:3000/upload_raw',
+  url: 'http://localhost:3000/upload_raw',
   // url: 'http://10.0.0.43:3000/upload_raw',
   method: 'POST',
   type: 'raw',
@@ -13,7 +13,7 @@ const commonOptions = {
   },
   // Below are commonOptions only supported on Android
   notification: {
-    enabled: true,
+    enabled: false,
   },
 };
 

@@ -1,5 +1,5 @@
 import RNFetchBlob from 'react-native-fetch-blob';
-import RNFS from 'react-native-fs';
+// import RNFS from 'react-native-fs';
 
 async function getFileStat(path) {
   const result = await RNFetchBlob.fs.stat(path);
@@ -9,11 +9,11 @@ async function getFileStat(path) {
   // });
 }
 
-function getFileData(path, type = 'utf8') {
-  return RNFS.readFile(path, type);
-  // .then(data11 => console.log(data11))
-  // .catch(err => console.log(err));
-}
+// function getFileData(path, type = 'utf8') {
+//   return RNFS.readFile(path, type);
+// .then(data11 => console.log(data11))
+// .catch(err => console.log(err));
+// }
 
 function reduceFolderArray(edgesArray) {
   return edgesArray
@@ -32,7 +32,7 @@ function transformFolderArray(folderArray) {
 
 const fileUtil = {
   getFileStat,
-  getFileData,
+  // getFileData,
   reduceFolderArray,
   transformFolderArray,
 };
