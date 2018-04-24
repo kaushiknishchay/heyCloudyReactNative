@@ -37,6 +37,7 @@ const SectionHeader = styled.Text`
 `;
 
 const SwitchWrap = styled.View`
+  margin-top: 10px;
   padding: 20px 15px;
   flex-direction: row;
   margin-bottom: 5px;
