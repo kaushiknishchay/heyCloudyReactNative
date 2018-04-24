@@ -12,7 +12,7 @@ Run `yarn set-realm` and `yarn run-android` to debug app on android device and s
 ## TODO
 - Replace AsyncStorage with Realm
 
-- `Add Permissions` check popup on HomeScreen (https://github.com/yonahforst/react-native-permissions)
+- <del>`Add Permissions` check popup on HomeScreen (https://github.com/yonahforst/react-native-permissions) </del>
 
 - `Add Queue` to solve 30s timeout on iOS devices
 
