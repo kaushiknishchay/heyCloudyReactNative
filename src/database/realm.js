@@ -129,7 +129,6 @@ class AllPhotos extends Realm.Object {
       acc[cur.name] = cur.backedUp;
       return acc;
     }, []);
-    console.log(allFolders);
     return allPhotosList.filter(obj => allFolders[obj.group_name] === true);
   }
 

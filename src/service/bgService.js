@@ -7,7 +7,7 @@ import startFileUpload from './fileUpload';
 import fileUtil from '../utils/file';
 
 BackgroundTask.define(() => {
-  console.log('Starting Files Sync');
+  // console.log('Starting Files Sync');
 
   const allPhotosRealm = getAllPhotosRealm();
   if (allPhotosRealm !== undefined && allPhotosRealm.length > 0) {
@@ -33,7 +33,7 @@ BackgroundTask.define(() => {
         });
       }
     } catch (e) {
-      console.error('Failed to Upload Files', e);
+      // console.error('Failed to Upload Files', e);
     }
   }
   BackgroundTask.finish();

@@ -62,14 +62,11 @@ class BackupSettingScreen extends Component {
   componentDidMount() {
     AsyncStorage.getItem('serviceEnabled')
       .then((res) => {
-        console.log('res', res);
         this.setState({
           serviceEnabled: res === 'true',
         });
       })
-      .catch((err) => {
-        console.log('err', err);
-      });
+      .catch((err) => {});
 
     try {
       const allFoldersList = getAllFoldersFromDB();
@@ -140,13 +137,11 @@ class BackupSettingScreen extends Component {
 
   toggleBackupService = () => {
     AsyncStorage.setItem('serviceEnabled', `${!this.state.serviceEnabled}`)
-      .catch((err) => { console.log('err1', err); });
+      .catch((err) => { });
 
     if (!this.state.serviceEnabled === false) {
       BGService.stop();
-      console.log('stop');
     } else {
-      console.log('start');
       BGService.start();
     }
 
@@ -174,7 +169,6 @@ class BackupSettingScreen extends Component {
 
   render() {
     const { deviceAllFolders, isLoading, serviceEnabled } = this.state;
-    console.log('se', serviceEnabled);
     return (
       <BackupScreen>
 
