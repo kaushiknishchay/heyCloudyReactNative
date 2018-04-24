@@ -12,6 +12,7 @@ import FolderCheckBoxItem from './FolderCheckBoxItem';
 import realm, { getAllFoldersFromDB, getAllFoldersRealm, getAllPhotosRealm } from '../database/realm';
 import Str from '../constants/string';
 import fileUtil from '../utils/file';
+import BGService from '../service/bgService';
 
 const BackupScreen = styled.View`
   padding: 0px 0 10px 0;
@@ -59,6 +60,17 @@ class BackupSettingScreen extends Component {
 
 
   componentDidMount() {
+    AsyncStorage.getItem('serviceEnabled')
+      .then((res) => {
+        console.log('res', res);
+        this.setState({
+          serviceEnabled: res === 'true',
+        });
+      })
+      .catch((err) => {
+        console.log('err', err);
+      });
+
     try {
       const allFoldersList = getAllFoldersFromDB();
       if (allFoldersList) {
@@ -72,13 +84,6 @@ class BackupSettingScreen extends Component {
     } catch (error) {
       Alert.alert('Error Fetching folders', error);
     }
-    AsyncStorage.getItem('serviceEnabled')
-      .then((res) => {
-        this.setState({
-          serviceEnabled: res === 'true',
-        });
-      })
-      .catch((err) => {});
   }
 
   setFoldersInState = (allFolders) => {
@@ -135,7 +140,15 @@ class BackupSettingScreen extends Component {
 
   toggleBackupService = () => {
     AsyncStorage.setItem('serviceEnabled', `${!this.state.serviceEnabled}`)
-      .catch((err) => {});
+      .catch((err) => { console.log('err1', err); });
+
+    if (!this.state.serviceEnabled === false) {
+      BGService.stop();
+      console.log('stop');
+    } else {
+      console.log('start');
+      BGService.start();
+    }
 
     this.setState((s, p) => ({
       serviceEnabled: !s.serviceEnabled,
@@ -161,7 +174,7 @@ class BackupSettingScreen extends Component {
 
   render() {
     const { deviceAllFolders, isLoading, serviceEnabled } = this.state;
-
+    console.log('se', serviceEnabled);
     return (
       <BackupScreen>
 

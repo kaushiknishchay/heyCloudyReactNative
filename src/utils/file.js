@@ -1,8 +1,9 @@
 import RNFetchBlob from 'react-native-fetch-blob';
 import RNFS from 'react-native-fs';
 
-function getFileStat(path) {
-  return RNFetchBlob.fs.stat(path);
+async function getFileStat(path) {
+  const result = await RNFetchBlob.fs.stat(path);
+  return result;
   // .then((data12) => {
   //   console.log(data12);
   // });
