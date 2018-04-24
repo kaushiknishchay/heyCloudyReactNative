@@ -1,4 +1,4 @@
-#Install
+# Install
 
 Run `yarn install` or `npm install` to install all dependencies
 
@@ -9,7 +9,7 @@ Run `yarn set-realm` and `yarn run-android` to debug app on android device and s
 
 ## **Tested only on android devices
 
-##TODO
+## TODO
 - Replace AsyncStorage with Realm
 
 - `Add Permissions` check popup on HomeScreen (https://github.com/yonahforst/react-native-permissions)
