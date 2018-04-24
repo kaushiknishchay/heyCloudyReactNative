@@ -4,7 +4,6 @@ import { FlatList } from 'react-native';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import BackgroundTask from 'react-native-background-task';
 
 
 import FolderItem from './FolderItem';
@@ -12,6 +11,7 @@ import BlankInfo from './BlankInfo';
 import FlatButton from './FlatButton';
 import Str from '../constants/string';
 import { appBackground } from '../constants/colors';
+import doPermissionRequest from '../utils/permissions';
 import { getAllFoldersFromDB, getBackupInfo } from '../database/realm';
 
 
@@ -50,6 +50,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
+    doPermissionRequest();
     // RNFS.readDir(RNFS.ExternalStorageDirectoryPath)
     //   .then((result) => {
     //     console.log('GOT RESULT', result);
