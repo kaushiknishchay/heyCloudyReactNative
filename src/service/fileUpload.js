@@ -1,15 +1,14 @@
 import Upload from 'react-native-background-upload';
 import realm from '../database/realm';
+import { SERVER_URL } from '../constants/globalConstants';
 
 const commonOptions = {
-  url: 'http://localhost:3000/upload_raw',
-  // url: 'http://10.0.0.43:3000/upload_raw',
+  url: SERVER_URL,
   method: 'POST',
   type: 'raw',
   // field: 'uploaded_media',
   // type: 'multipart',
   headers: {
-    // 'content-type': 'application/x-www-form-urlencoded', // Customize content-type
   },
   // Below are commonOptions only supported on Android
   notification: {
