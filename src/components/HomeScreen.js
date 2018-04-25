@@ -82,7 +82,7 @@ class Home extends Component {
   }
 
   setBackUpInfo = () => {
-    console.log(getBackupInfo());
+    getBackupInfo();
   };
 
   getFoldersFromRealm() {
@@ -190,11 +190,6 @@ class Home extends Component {
 
     return (
       <HomeWrap>
-
-        {true && <Button
-          title="Backup"
-          onPress={() => doFileUpload()}
-        />}
 
         {this.renderBackupInfo(backupFolders)}
 
