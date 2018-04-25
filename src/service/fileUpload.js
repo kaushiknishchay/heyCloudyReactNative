@@ -17,7 +17,12 @@ const commonOptions = {
   },
 };
 
-export default function startFileUpload(passedOptions) {
+export default function startFileUpload(
+  passedOptions,
+  currentIndex,
+  totalFiles,
+  callBack = () => {},
+) {
   // Upload.getFileInfo(passedOptions.path)
   const options = Object.assign({}, commonOptions, passedOptions);
 
@@ -33,7 +38,7 @@ export default function startFileUpload(passedOptions) {
     });
 
     Upload.addListener('error', uploadId, (data) => {
-      // console.log(`Error: ${data.error}%`);
+      // console.log(`Error: ${data.error}% ${currentIndex}`);
       realm.write(() => {
         const backupObj = realm.objects('BackupInfo');
         if (backupObj.length > 0) {
@@ -47,10 +52,14 @@ export default function startFileUpload(passedOptions) {
           });
         }
       });
+
+      if (currentIndex === totalFiles - 1) {
+        // trigger
+        callBack();
+      }
     });
 
     Upload.addListener('completed', uploadId, (data) => {
-      // console.log('Completed!');
       realm.write(() => {
         const backupObj = realm.objects('BackupInfo');
         if (backupObj.length > 0) {
@@ -64,6 +73,11 @@ export default function startFileUpload(passedOptions) {
           });
         }
       });
+
+      if (currentIndex === totalFiles - 1) {
+        // trigger
+        callBack();
+      }
     });
   }).catch((err) => {
     // console.log('Upload error!', err);
