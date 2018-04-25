@@ -138,13 +138,14 @@ class Home extends Component {
   renderBackupInfo = (backupFolders) => {
     const backupInfo = getBackupInfo();
     if (backupInfo) {
+      const time = new Date(backupInfo.timestamp);
       return (
         <Section>
           <TitleText>Last Backup Info</TitleText>
 
           <SubText>
             <BoldText>Date: </BoldText>
-            {new Date(backupInfo.timestamp).toLocaleString()}
+            {`${time.toDateString()} ${time.toLocaleTimeString()}`}
           </SubText>
 
           <SubText>
