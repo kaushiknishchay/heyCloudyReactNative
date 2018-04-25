@@ -1,5 +1,8 @@
 import Realm from 'realm';
 
+const SCHEMA_VERSION = 6;
+
+
 class Folder extends Realm.Object {
   get data() {
     return {
@@ -100,6 +103,7 @@ class BackupInfo extends Realm.Object {
     return {
       timestamp: this.timestamp,
       filesCount: this.filesCount,
+      errorFilesCount: this.errorFilesCount,
       successful: this.successful,
       errorMessage: this.errorMessage,
     };
@@ -110,6 +114,7 @@ BackupInfo.schema = {
   name: 'BackupInfo',
   properties: {
     timestamp: 'date',
+    errorFilesCount: { type: 'int', default: 0 },
     filesCount: { type: 'int', default: 0 },
     successful: 'bool',
     errorMessage: 'string',
@@ -165,7 +170,7 @@ AllPhotos.schema = {
 const realm = new Realm({
   schema: [
     Folder, AllFoldersList, AllPhotos, Node, Image, BackupInfo],
-  schemaVersion: 5,
+  schemaVersion: SCHEMA_VERSION,
 });
 
 

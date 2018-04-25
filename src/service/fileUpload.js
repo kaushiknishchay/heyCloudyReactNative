@@ -35,11 +35,17 @@ export default function startFileUpload(passedOptions) {
     Upload.addListener('error', uploadId, (data) => {
       // console.log(`Error: ${data.error}%`);
       realm.write(() => {
-        realm.create('BackupInfo', {
-          timestamp: new Date().toLocaleString(),
-          successful: false,
-          errorMessage: data.error,
-        }, true);
+        const backupObj = realm.objects('BackupInfo');
+        if (backupObj.length > 0) {
+          backupObj[0].errorFilesCount += 1;
+        } else {
+          realm.create('BackupInfo', {
+            timestamp: new Date().toLocaleString(),
+            successful: false,
+            errorMessage: data.error,
+            errorFilesCount: 1,
+          });
+        }
       });
     });
 

@@ -3,6 +3,7 @@ import realm, { getAllPhotosRealm } from '../database/realm';
 import fileUtil from '../utils/file';
 
 export default function doFileUpload() {
+  console.log('aa');
   const allPhotosRealm = getAllPhotosRealm();
   if (allPhotosRealm !== undefined && allPhotosRealm.length > 0) {
     const allPhotos = allPhotosRealm[0];

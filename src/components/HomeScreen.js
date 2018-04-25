@@ -36,8 +36,9 @@ const TitleText = styled.Text`
   margin-bottom: 10px;
 `;
 const BoldText = styled.Text`
+  letter-spacing:0.4px;
   font-weight: bold;
-  color: #333;
+  color: ${props => (props.color ? props.color : '#333')};
 `;
 
 const SubText = styled.Text`
@@ -139,6 +140,8 @@ class Home extends Component {
     const backupInfo = getBackupInfo();
     if (backupInfo) {
       const time = new Date(backupInfo.timestamp);
+
+
       return (
         <Section>
           <TitleText>Last Backup Info</TitleText>
@@ -149,13 +152,24 @@ class Home extends Component {
           </SubText>
 
           <SubText>
-            <BoldText>Files count: </BoldText>
+            <BoldText>Files uploaded: </BoldText>
             {backupInfo.filesCount}
           </SubText>
-
-          {!backupInfo.successful &&
-          <SubText>Error: {backupInfo.errorMessage}</SubText>
+          {
+            backupInfo.errorFilesCount > 0 &&
+            <SubText>
+              <BoldText color="#c00">Files failed: </BoldText>
+              {backupInfo.errorFilesCount}
+            </SubText>
           }
+          {
+            backupInfo.errorFilesCount > 0 &&
+            <SubText>
+              <BoldText color="#cc0000">Error: </BoldText>
+              {backupInfo.errorMessage}
+            </SubText>
+          }
+
         </Section>);
     }
     if (!backupInfo && backupFolders.length > 0) {
@@ -177,7 +191,7 @@ class Home extends Component {
     return (
       <HomeWrap>
 
-        {false && <Button
+        {true && <Button
           title="Backup"
           onPress={() => doFileUpload()}
         />}
