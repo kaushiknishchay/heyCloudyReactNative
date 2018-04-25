@@ -10,7 +10,7 @@ BackgroundTask.define(() => {
 
 function start() {
   BackgroundTask.schedule({
-    period: 900, // Aim to run every 30 mins - more conservative on battery
+    period: 86400, // Aim to run every 30 mins - more conservative on battery
   });
 }
 
