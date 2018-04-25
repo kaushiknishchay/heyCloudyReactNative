@@ -2,8 +2,7 @@ import startFileUpload from './fileUpload';
 import realm, { getAllPhotosRealm } from '../database/realm';
 import fileUtil from '../utils/file';
 
-export default function doFileUpload() {
-  console.log('aa');
+export default function doFileUpload(callBack = () => {}) {
   const allPhotosRealm = getAllPhotosRealm();
   if (allPhotosRealm !== undefined && allPhotosRealm.length > 0) {
     const allPhotos = allPhotosRealm[0];
@@ -12,19 +11,20 @@ export default function doFileUpload() {
       const backupFolders = [...realm.objects('Folder')].map(obj => obj.data);
 
       if (allPhotos) {
-        const abc = allPhotos.getPhotosToBackup(backupFolders);
-        abc.forEach(async (obj) => {
+        const backupPhotosList = allPhotos.getPhotosToBackup(backupFolders);
+
+        backupPhotosList.forEach((obj, currentIndex) => {
           const { uri } = obj.image;
-          await fileUtil.getFileStat(uri)
+          fileUtil.getFileStat(uri)
             .then((stats) => {
               startFileUpload({
                 path: `${stats.path}`,
                 headers: {
-                  'content-type': obj.type, // server requires a content-type header
+                  'content-type': obj.type,
                   filePath: stats.path,
                   fileName: stats.filename,
                 },
-              });
+              }, currentIndex, backupPhotosList.length, callBack);
             });
         });
       }

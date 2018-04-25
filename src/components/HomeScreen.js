@@ -1,8 +1,10 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
-import { Button, FlatList } from 'react-native';
+import { ActivityIndicator, Button, FlatList } from 'react-native';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
@@ -10,9 +12,9 @@ import FolderItem from './FolderItem';
 import BlankInfo from './BlankInfo';
 import FlatButton from './FlatButton';
 import Str from '../constants/string';
-import { appBackground } from '../constants/colors';
+import { accentColor, appBackground } from '../constants/colors';
 import doPermissionRequest from '../utils/permissions';
-import { getAllFoldersFromDB, getBackupInfo } from '../database/realm';
+import { getAllFoldersFromDB } from '../database/realm';
 import doFileUpload from '../service/manualFileUpload';
 
 
@@ -53,36 +55,21 @@ class Home extends Component {
     super(props);
     this.state = {
       backupFolders: [],
+      isBackingUp: false,
     };
   }
 
   componentDidMount() {
     doPermissionRequest();
-    // RNFS.readDir(RNFS.ExternalStorageDirectoryPath)
-    //   .then((result) => {
-    //     console.log('GOT RESULT', result);
-    //     return Promise.all([RNFS.stat(result[0].path), result[0].path]);
-    //   })
-    //   .then((statResult) => {
-    //     if (statResult[0].isFile()) {
-    //       return RNFS.readFile(statResult[1], 'utf8');
-    //     }
-    //     return 'no file';
-    //   })
-    //   .then((contents) => {
-    //     console.log(contents);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err.message, err.code);
-    //   });
-
     this.getFoldersFromRealm();
-
     this.setBackUpInfo();
   }
 
   setBackUpInfo = () => {
-    console.log(getBackupInfo());
+    this.props.getBackupInfo();
+    this.setState((s, p) => ({
+      isBackingUp: false,
+    }));
   };
 
   getFoldersFromRealm() {
@@ -94,6 +81,13 @@ class Home extends Component {
       });
     }
   }
+
+  doManualBackup = () => {
+    doFileUpload(this.setBackUpInfo);
+    this.setState((s, p) => ({
+      isBackingUp: true,
+    }));
+  };
 
   goToSettings = () => {
     if (this.props.navigation) { this.props.navigation.navigate('BackupSetting'); }
@@ -137,8 +131,9 @@ class Home extends Component {
 
 
   renderBackupInfo = (backupFolders) => {
-    const backupInfo = getBackupInfo();
-    if (backupInfo) {
+    const { backupInfo } = this.props;
+
+    if (backupInfo && backupFolders.length > 0) {
       const time = new Date(backupInfo.timestamp);
 
 
@@ -183,18 +178,41 @@ class Home extends Component {
     return null;
   };
 
+  renderManualBackupSection = () => {
+    const { backupFolders, isBackingUp } = this.state;
+    if (backupFolders && backupFolders.length > 0) {
+      return (
+        <Section>
+          <TitleText>Click to backup</TitleText>
+
+          <Button
+            title="Backup"
+            disabled={isBackingUp}
+            onPress={this.doManualBackup}
+          />
+
+          {
+            isBackingUp &&
+            <ActivityIndicator
+              size="large"
+              color={accentColor}
+            />
+          }
+
+        </Section>);
+    }
+    return null;
+  };
+
   renderItem = ({ item }) => (<FolderItem item={item} />);
 
   render() {
-    const { backupFolders } = this.state;
+    const { backupFolders, isBackingUp } = this.state;
 
     return (
       <HomeWrap>
 
-        {true && <Button
-          title="Backup"
-          onPress={() => doFileUpload()}
-        />}
+        {this.renderManualBackupSection()}
 
         {this.renderBackupInfo(backupFolders)}
 
@@ -206,9 +224,27 @@ class Home extends Component {
     );
   }
 }
+Home.defaultProps = {
+  backupInfo: undefined,
+};
 
 Home.propTypes = {
   navigation: PropTypes.object.isRequired,
+  backupInfo: PropTypes.object,
+  getBackupInfo: PropTypes.func.isRequired,
 };
 
-export default Home;
+function initMapStateToProps(state) {
+  const app = state.get('backupApp');
+  return {
+    backupInfo: app.get('backupInfo').toJS(),
+  };
+}
+
+function initMapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    getBackupInfo: () => dispatch({ type: 'BACKUP_INFO_FETCH' }),
+  }, dispatch);
+}
+
+export default connect(initMapStateToProps, initMapDispatchToProps)(Home);

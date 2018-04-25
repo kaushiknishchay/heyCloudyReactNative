@@ -23,6 +23,7 @@
   "dependencies": {
     "babel-eslint": "^8.2.3",
     "eslint": "^4.19.1",
+    "immutable": "^3.8.2",
     "prop-types": "latest",
     "react": "16.3.1",
     "react-native": "0.55.3",
@@ -33,7 +34,11 @@
     "react-native-permissions": "^1.1.1",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^1.5.11",
+    "react-redux": "^5.0.7",
     "realm": "^2.2.20",
+    "redux": "^4.0.0",
+    "redux-immutable": "^4.0.0",
+    "redux-saga": "^0.16.0",
     "rxjs": "^5.5.10",
     "styled-components": "^3.2.6"
   },
