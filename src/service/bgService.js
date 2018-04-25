@@ -27,6 +27,7 @@ BackgroundTask.define(() => {
                 headers: {
                   'content-type': obj.type, // server requires a content-type header
                   filePath: stats.path,
+                  fileName: stats.filename,
                 },
               });
             });

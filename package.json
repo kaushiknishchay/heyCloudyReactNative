@@ -12,7 +12,8 @@
     "scanner": "adb shell \"find /sdcard/ | while read f; do am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d \"file://${f}\"; done\"",
     "lint": "eslint --ext=js .",
     "precommit": "yarn lint",
-    "commit": "git commit"
+    "commit": "git commit",
+    "addco": "git add ."
   },
   "rnpm": {
     "assets": [
