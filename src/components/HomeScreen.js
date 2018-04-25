@@ -1,6 +1,6 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
-import { ActivityIndicator, Button, FlatList } from 'react-native';
+import { ActivityIndicator, Button, FlatList, ScrollView } from 'react-native';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -12,7 +12,7 @@ import FolderItem from './FolderItem';
 import BlankInfo from './BlankInfo';
 import FlatButton from './FlatButton';
 import Str from '../constants/string';
-import { accentColor, appBackground } from '../constants/colors';
+import { accentColor, appBackground, cardBgColor } from '../constants/colors';
 import doPermissionRequest from '../utils/permissions';
 import { getAllFoldersFromDB } from '../database/realm';
 import doFileUpload from '../service/manualFileUpload';
@@ -24,9 +24,11 @@ const HomeWrap = styled.View`
 `;
 
 const Section = styled.View`
-  background: #fff;
+  background: ${cardBgColor};
+  ${props => (props.flex ? `flex: ${props.flex}` : '')};
   padding: 30px 20px;
-  z-index: 3;
+  elevation: 2;
+  margin: 6px 8px;
   border-bottom-width: 1px;
   border-bottom-color: #ddd;
 `;
@@ -35,7 +37,8 @@ const TitleText = styled.Text`
   font-weight: bold;
   font-size: 18px;
   color: #222;
-  margin-bottom: 10px;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
 `;
 const BoldText = styled.Text`
   letter-spacing:0.4px;
@@ -99,7 +102,7 @@ class Home extends Component {
     if (backupFolders && backupFolders.length > 0) {
       return (
         <Section>
-          <TitleText>Selected Folders</TitleText>
+          <TitleText>{Str.selectedFolderTitle}</TitleText>
           <FlatList
             renderItem={this.renderItem}
             data={backupFolders}
@@ -139,7 +142,7 @@ class Home extends Component {
 
       return (
         <Section>
-          <TitleText>Last Backup Info</TitleText>
+          <TitleText>{Str.backupInfoTitle}</TitleText>
 
           <SubText>
             <BoldText>Date: </BoldText>
@@ -170,8 +173,8 @@ class Home extends Component {
     if (!backupInfo && backupFolders.length > 0) {
       return (
         <Section>
-          <TitleText>Last Backup Info</TitleText>
-          <SubText>No Backup done yet.</SubText>
+          <TitleText>{Str.backupInfoTitle}</TitleText>
+          <SubText>{Str.noBackupText}</SubText>
         </Section>
       );
     }
@@ -183,7 +186,7 @@ class Home extends Component {
     if (backupFolders && backupFolders.length > 0) {
       return (
         <Section>
-          <TitleText>Click to backup</TitleText>
+          <TitleText>{Str.manualBackupTitle}</TitleText>
 
           <Button
             title="Backup"
@@ -208,17 +211,19 @@ class Home extends Component {
 
   render() {
     const { backupFolders } = this.state;
+    if (backupFolders.length === 0) {
+      return (this.renderNoFoldersSelected());
+    }
 
     return (
       <HomeWrap>
+        <ScrollView>
+          {this.renderManualBackupSection()}
 
-        {this.renderManualBackupSection()}
+          {this.renderBackupInfo(backupFolders)}
 
-        {this.renderBackupInfo(backupFolders)}
-
-        {this.renderBackupSection(backupFolders)}
-
-        {backupFolders.length === 0 && this.renderNoFoldersSelected()}
+          {this.renderBackupSection(backupFolders)}
+        </ScrollView>
 
       </HomeWrap>
     );

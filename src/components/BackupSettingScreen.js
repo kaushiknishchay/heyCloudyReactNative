@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Alert, CameraRoll, FlatList, Switch, AsyncStorage } from 'react-native';
+import { Alert, CameraRoll, FlatList, Switch, AsyncStorage, ScrollView } from 'react-native';
 import styled from 'styled-components';
 // ------ Constants -------- //
-import { appBackground } from '../constants/colors';
+import { appBackground, cardBgColor } from '../constants/colors';
 // ------ Components -------- //
 import FlatButton from './FlatButton';
 import BlankInfo from './BlankInfo';
@@ -15,7 +15,7 @@ import fileUtil from '../utils/file';
 import BGService from '../service/bgService';
 
 const BackupScreen = styled.View`
-  padding: 0px 0 10px 0;
+  padding: 0px;
   background: ${appBackground};
   flex: 1;
   flex-direction: column;
@@ -37,10 +37,11 @@ const SectionHeader = styled.Text`
 `;
 
 const SwitchWrap = styled.View`
-  margin-top: 10px;
+  margin: 5px;
+  elevation: 1;
   padding: 20px 15px;
+  background-color: ${cardBgColor}
   flex-direction: row;
-  margin-bottom: 5px;
 `;
 
 const SwitchText = styled.Text`
@@ -172,18 +173,18 @@ class BackupSettingScreen extends Component {
     const { deviceAllFolders, isLoading, serviceEnabled } = this.state;
     return (
       <BackupScreen>
+        <ScrollView>
+          <SwitchWrap>
+            <SwitchText>Enable Service</SwitchText>
+            <Switch
+              onValueChange={this.toggleBackupService}
+              value={serviceEnabled}
+            />
+          </SwitchWrap>
 
-        <SwitchWrap>
-          <SwitchText>Enable Service</SwitchText>
-          <Switch
-            onValueChange={this.toggleBackupService}
-            value={serviceEnabled}
-          />
-        </SwitchWrap>
+          {isLoading && <LoadingPage text={Str.refreshWaitText} />}
 
-        {isLoading && <LoadingPage text={Str.refreshWaitText} />}
-
-        {
+          {
           !isLoading &&
           deviceAllFolders.length > 0 &&
           <FlatList
@@ -194,7 +195,7 @@ class BackupSettingScreen extends Component {
           />
         }
 
-        {
+          {
           !isLoading &&
           deviceAllFolders.length === 0 &&
           <BlankInfo
@@ -207,7 +208,7 @@ class BackupSettingScreen extends Component {
             />
           </BlankInfo>
         }
-
+        </ScrollView>
       </BackupScreen>
     );
   }
