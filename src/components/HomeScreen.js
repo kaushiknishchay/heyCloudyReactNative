@@ -236,8 +236,9 @@ Home.propTypes = {
 
 function initMapStateToProps(state) {
   const app = state.get('backupApp');
+  const backupInfo = app.get('backupInfo') !== undefined ? app.get('backupInfo').toJS() : {};
   return {
-    backupInfo: app.get('backupInfo').toJS(),
+    backupInfo,
   };
 }
 
