@@ -207,7 +207,7 @@ class Home extends Component {
   renderItem = ({ item }) => (<FolderItem item={item} />);
 
   render() {
-    const { backupFolders, isBackingUp } = this.state;
+    const { backupFolders } = this.state;
 
     return (
       <HomeWrap>
@@ -236,7 +236,7 @@ Home.propTypes = {
 
 function initMapStateToProps(state) {
   const app = state.get('backupApp');
-  const backupInfo = app.get('backupInfo') !== undefined ? app.get('backupInfo').toJS() : {};
+  const backupInfo = app.get('backupInfo') !== undefined ? app.get('backupInfo').toJS() : undefined;
   return {
     backupInfo,
   };
