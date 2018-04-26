@@ -1,3 +1,8 @@
+
+[![Build status](https://build.appcenter.ms/v0.1/apps/06504b1f-2588-4e54-a8e9-d9b7c9d769a7/branches/ota/badge)](https://appcenter.ms)
+
+
+
 # Install
 
 Run `yarn install` or `npm install` to install all dependencies
@@ -25,3 +30,5 @@ Run `yarn set-realm` and `yarn run-android` to debug app on android device and s
 - Try to add Video Backup 
 
 - Code Cleanup
+
+
