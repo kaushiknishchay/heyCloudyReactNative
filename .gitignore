@@ -24,12 +24,14 @@ project.xcworkspace
 
 # Android/IntelliJ
 #
+
 build/
 .idea/
 gradle/
 .gradle/
 local.properties
 *.iml
+!android/gradle/wrapper/gradle-wrapper.jar
 
 # node.js
 #
