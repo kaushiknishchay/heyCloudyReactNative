@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Alert, CameraRoll, FlatList, Switch, AsyncStorage, ScrollView } from 'react-native';
+import { Alert, AsyncStorage, CameraRoll, FlatList, ScrollView, Switch } from 'react-native';
 import styled from 'styled-components';
 // ------ Constants -------- //
-import { appBackground, cardBgColor } from '../constants/colors';
+import { appBackground } from '../constants/colors';
 // ------ Components -------- //
 import FlatButton from './FlatButton';
 import BlankInfo from './BlankInfo';
@@ -14,6 +14,7 @@ import Str from '../constants/string';
 import fileUtil from '../utils/file';
 import BGService from '../service/bgService';
 import doPermissionRequest from '../utils/permissions';
+import { SwitchText, SwitchWrap } from './SimpleComponents';
 
 const BackupScreen = styled.View`
   padding: 0px;
@@ -36,20 +37,6 @@ const SectionHeader = styled.Text`
   letter-spacing: 0.51px;
   color: #000;
 `;
-
-const SwitchWrap = styled.View`
-  margin: 5px;
-  elevation: 1;
-  padding: 20px 15px;
-  background-color: ${cardBgColor}
-  flex-direction: row;
-`;
-
-const SwitchText = styled.Text`
-  font-size: 19px;
-  flex: 1;
-`;
-
 
 class BackupSettingScreen extends Component {
   constructor(props) {

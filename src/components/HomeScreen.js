@@ -12,10 +12,11 @@ import FolderItem from './FolderItem';
 import BlankInfo from './BlankInfo';
 import FlatButton from './FlatButton';
 import Str from '../constants/string';
-import { accentColor, appBackground, cardBgColor } from '../constants/colors';
+import { accentColor, appBackground } from '../constants/colors';
 import doPermissionRequest from '../utils/permissions';
 import { getAllFoldersFromDB } from '../database/realm';
 import doFileUpload from '../service/manualFileUpload';
+import { BoldText, Section, SubText, TitleText } from './SimpleComponents';
 
 
 const HomeWrap = styled.View`
@@ -23,35 +24,6 @@ const HomeWrap = styled.View`
   background-color: ${appBackground};
 `;
 
-const Section = styled.View`
-  background: ${cardBgColor};
-  ${props => (props.flex ? `flex: ${props.flex}` : '')};
-  padding: 30px 20px;
-  elevation: 2;
-  margin: 6px 8px;
-  border-bottom-width: 1px;
-  border-bottom-color: #ddd;
-`;
-
-const TitleText = styled.Text`
-  font-weight: bold;
-  font-size: 18px;
-  color: #222;
-  padding-bottom: 5px;
-  margin-bottom: 15px;
-`;
-const BoldText = styled.Text`
-  letter-spacing:0.4px;
-  font-weight: bold;
-  color: ${props => (props.color ? props.color : '#333')};
-`;
-
-const SubText = styled.Text`
-  font-size: 17px;
-  margin: 5px 0;
-  color: #555;
-  line-height: 20px;
-`;
 
 class Home extends Component {
   constructor(props) {
