@@ -13,6 +13,7 @@ import realm, { getAllFoldersFromDB, getAllFoldersRealm, getAllPhotosRealm } fro
 import Str from '../constants/string';
 import fileUtil from '../utils/file';
 import BGService from '../service/bgService';
+import doPermissionRequest from '../utils/permissions';
 
 const BackupScreen = styled.View`
   padding: 0px;
@@ -62,6 +63,8 @@ class BackupSettingScreen extends Component {
 
 
   componentDidMount() {
+    doPermissionRequest();
+
     AsyncStorage.getItem('serviceEnabled')
       .then((res) => {
         this.setState({
@@ -104,9 +107,11 @@ class BackupSettingScreen extends Component {
         .then((edges) => {
           realm.write(() => {
             if (getAllPhotosRealm().length > 0) {
+              realm.delete(realm.objects('Node'));
               realm.delete(getAllPhotosRealm());
             }
             if (getAllFoldersRealm().length > 0) {
+              realm.delete(realm.objects('Folder'));
               realm.delete(getAllFoldersRealm());
             }
             const newEdges = edges.map(obj => obj.node);
