@@ -31,7 +31,8 @@ gradle/
 .gradle/
 local.properties
 *.iml
-!android/gradle/wrapper/gradle-wrapper.jar
+!gradle-wrapper.jar
+!gradle-wrapper.properties
 
 # node.js
 #
