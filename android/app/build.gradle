@@ -159,6 +159,9 @@ android {
 }
 
 dependencies {
+    compile project(':appcenter')
+    compile project(':appcenter-analytics')
+    compile project(':appcenter-crashes')
     compile project(':react-native-background-upload')
     compile project(path: ':react-native-background-task')
     compile project(path: ':react-native-fs')
