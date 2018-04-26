@@ -86,7 +86,7 @@ class Home extends Component {
   }
 
   doManualBackup = () => {
-    doFileUpload(this.setBackUpInfo);
+    if (this.state.isBackingUp === false) { doFileUpload(this.setBackUpInfo); }
     this.setState((s, p) => ({
       isBackingUp: true,
     }));
@@ -138,7 +138,6 @@ class Home extends Component {
 
     if (backupInfo && backupFolders.length > 0) {
       const time = new Date(backupInfo.timestamp);
-
 
       return (
         <Section>
