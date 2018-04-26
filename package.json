@@ -21,6 +21,9 @@
     ]
   },
   "dependencies": {
+    "appcenter": "^1.5.0",
+    "appcenter-analytics": "^1.5.0",
+    "appcenter-crashes": "^1.5.0",
     "babel-eslint": "^8.2.3",
     "eslint": "^4.19.1",
     "immutable": "^3.8.2",
