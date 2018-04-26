@@ -4,25 +4,30 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Dimensions, Image, StyleSheet } from 'react-native';
 import fileUtil from '../utils/file';
+import { SubText, TitleText } from './SimpleComponents';
 
 
 const ImageWrap = styled.View`
-  flex: 1;
   flex-direction: column;
   align-items: stretch;
   margin-bottom: 20px;
-  z-index: 4;
+  elevation: 4;
   background-color: #eee;
   border-radius: 5px;
   border: 1px solid #ddd;
 `;
-const ImageAlbumText = styled.Text`
+
+const ImageAlbumTextWrap = styled.View`
   background: #fff;
   margin: 0px;
+  flex-direction: column;
   padding: 15px 20px;
+  border-radius: 2px;
+`;
+
+const ImageText = styled.Text`
   font-size: 18px;
   font-weight: bold;
-  border-radius: 2px;
 `;
 
 
@@ -69,14 +74,16 @@ class ImageItem extends React.Component {
     const screenWidth = Dimensions.get('screen').width - 20;
     let imageHeight;
 
-    const maxOf = image.width > image.height ? image.width : image.height;
-    const minOf = image.width < image.height ? image.width : image.height;
+    const maxOf = Math.max(image.width, image.height);
+    const minOf = Math.min(image.width, image.height);
     const imageWidth = screenWidth;
 
+    // Portrait Image
     if (image.width > image.height) {
-      imageHeight = (imageWidth / maxOf) * minOf;
+      imageHeight = Math.min((imageWidth / maxOf) * minOf, 300);
     } else {
-      imageHeight = (imageWidth / minOf) * maxOf * 0.8;
+    // Landscape Image
+      imageHeight = Math.min((imageWidth / minOf) * maxOf * 0.6, 300);
     }
 
     const data1 = new FormData();
@@ -101,7 +108,10 @@ class ImageItem extends React.Component {
           source={{ uri: image.uri }}
           resizeMode="contain"
         />
-        <ImageAlbumText>{imageData.filename} ({albumName})</ImageAlbumText>
+        <ImageAlbumTextWrap>
+          <TitleText>{albumName}</TitleText>
+          <SubText>{imageData.filename}</SubText>
+        </ImageAlbumTextWrap>
       </ImageWrap>
     );
   }
