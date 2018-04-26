@@ -9,6 +9,11 @@ class Folder extends Realm.Object {
       id: this.id, name: this.name, count: this.count, backedUp: this.backedUp,
     };
   }
+  toString() {
+    return {
+      id: this.id, name: this.name, count: this.count, backedUp: this.backedUp,
+    };
+  }
 }
 
 Folder.schema = {
@@ -28,7 +33,7 @@ class AllFoldersList extends Realm.Object {
   }
 
   getBackupEnabledFolders() {
-    return [...this.items.values()].filter(obj => obj.data.backedUp === true);
+    return [...this.items.filtered('backedUp == true').values()];
   }
 
   getNameList() {
@@ -129,12 +134,12 @@ class AllPhotos extends Realm.Object {
   }
 
   getPhotosToBackup(backupFolders) {
-    const allPhotosList = this.getAllNodes();
-    const allFolders = backupFolders.reduce((acc, cur) => {
-      acc[cur.name] = cur.backedUp;
-      return acc;
-    }, []);
-    return allPhotosList.filter(obj => allFolders[obj.group_name] === true);
+    const allPhotosList = this.edges.filtered(backupFolders);
+    // const allFolders = backupFolders.reduce((acc, cur) => {
+    //   acc[cur.name] = cur.backedUp;
+    //   return acc;
+    // }, []);
+    return allPhotosList.map(obj => obj.toString());
   }
 
   //
