@@ -1,4 +1,4 @@
-package com.splashscreen;
+package com.mycloudbackup;
 
 import android.app.Application;
 

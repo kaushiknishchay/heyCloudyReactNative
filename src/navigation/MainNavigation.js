@@ -5,12 +5,13 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import DrawerNavigation from './DrawerNavigation';
 import * as colors from '../constants/colors';
+import Str from '../constants/string';
 
 const MainNavigation = StackNavigator({
   Root: DrawerNavigation,
 }, {
   navigationOptions: ({ navigation }) => ({
-    title: 'SplashScreen',
+    title: Str.appName,
     headerTitleStyle: {
       fontFamily: 'Roboto',
       color: colors.headerTitleColor,

@@ -1,4 +1,5 @@
 export default {
+  appName: 'Cloud Backup',
   selectedFolderTitle: 'Selected Folders',
   manualBackupTitle: 'Click to backup manually',
   backupInfoTitle: 'Last Backup Info',

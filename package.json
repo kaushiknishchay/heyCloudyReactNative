@@ -1,6 +1,6 @@
 {
-  "name": "splashScreen",
-  "version": "0.0.1",
+  "name": "CloudBackup",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "rmbuild": " rm -r ./android/app/build",
@@ -9,7 +9,7 @@
     "android": "yarn set-realm && react-native run-android",
     "build:android": "react-native run-android --variant=release",
     "test": "jest",
-    "scanner": "adb shell \"find /sdcard/ | while read f; do am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d \"file://${f}\"; done\"",
+    "scanner:emulator": "adb shell \"find /sdcard/ | while read f; do am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d \"file://${f}\"; done\"",
     "lint": "eslint --ext=js .",
     "precommit": "yarn lint",
     "commit": "git commit",
